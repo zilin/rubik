@@ -9,45 +9,51 @@
   <link rel="stylesheet" href="css/style.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="js/roofpig_and_three.min.js"></script>
+  <script src="//cdn.jsdelivr.net/vue/1.0.21/vue.js"></script>
   <title>Rubik</title>
 </head>
 <body>
 
-<div class="container">
-  <h3>1<sup>st</sup>: Easy cases</h3>
-  <table>
-    <thead>
-      <tr><th>Case</th><th>Mirror</th></tr>
-    </thead>
-  <tbody>
-    <tr>
-      <td><div class="width150 roofpig" data-config="alg=R U R'|colored=D* F R L U B FR|hover=1|speed=500|flags=showalg|colors=U:y F:b R:r B:g L:o D:w"></div></td>
-      <td><div class="width150 roofpig" data-config="alg=F' U' F|colored=D* F R L U B FR|hover=1|speed=500|flags=showalg|colors=U:y F:b R:r B:g L:o D:w"></div></td>
-    </tr>
-    <tr>
-      <td><div class="width150 roofpig" data-config="alg=U' F' U F|colored=D* F R L U B FR|hover=1|speed=500|flags=showalg|colors=U:y F:b R:r B:g L:o D:w"></div></td>
-      <td><div class="width150 roofpig" data-config="alg=U R U' R'|colored=D* F R L U B FR|hover=1|speed=500|flags=showalg|colors=U:y F:b R:r B:g L:o D:w"></div></td>
-    </tr>
-  </tbody>
-  </table>
-
-  <h3>2<sup>nd</sup>: Corner and Edge in Top Layer (Type 1)</h3>
-  <table>
-    <thead>
-      <tr><th>Case</th><th>Mirror</th></tr>
-    </thead>
-  <tbody>
-    <tr>
-      <td><div class="width150 roofpig" data-config="alg=U' R U' R' U R U R'|colored=D* F R L U B FR|hover=1|speed=500|flags=showalg|colors=U:y F:b R:r B:g L:o D:w"></div></td>
-      <td><div class="width150 roofpig" data-config="alg=d R' U R U' R' U' R|colored=D* F R L U B FR|hover=1|speed=500|flags=showalg|colors=U:y F:b R:r B:g L:o D:w"></div></td>
-    </tr>
-    <tr>
-      <td><div class="width150 roofpig" data-config="alg=U' R U R' U R U R'|colored=D* F R L U B FR|hover=1|speed=500|flags=showalg|colors=U:y F:b R:r B:g L:o D:w"></div></td>
-      <td><div class="width150 roofpig" data-config="alg=d R' U' R U' R' U' R|colored=D* F R L U B FR|hover=1|speed=500|flags=showalg|colors=U:y F:b R:r B:g L:o D:w"></div></td>
-    </tr>
-  </tbody>
-  </table>
-
+  <div id="app">
+    <div v-for="section in sections">
+      <h3>{{ section.header }}</h3>
+      <table>
+        <thead><tr><th>Case</th><th>Mirror</th></tr></thead>
+        <tbody>
+          <tr v-for="row in section.cases">
+            <td v-for="col in row">
+              <div class="width150 roofpig"
+                  data-config="alg={{ col.alg }}|colored=D* F R L U B FR|hover=1|speed=500|flags=showalg|colors=U:y F:b R:r B:g L:o D:w">
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    var case1 = new Vue({
+      el: '#app',
+      data: {
+        sections: [{
+          header: "Case 1: Easy cases",
+          cases: [
+            [{alg: "R U R'"}, {alg: "F' U' F"}],
+            [{alg: "U' F' U F"},{alg: "U R U' R'"}]
+          ]
+        }, {
+          header: "Case 2: Corner and Edge in Top Layer (Type 1)",
+          cases: [
+            [{alg: "U' R U' R' U R U R'"}, {alg: "d R' U R U' R' U' R"}],
+            [{alg: "U' R U R' U R U R'"},{alg: "d R' U' R U' R' U' R"}],
+            [{alg: "d R' U2 R d' R U R'"},{alg: "U' R U2 R' d R' U' R"}],
+            [{alg: "d R' U2 R U2 R' U R"},{alg: "U' R U2 R' U2 R U' R'"}],
+            [{alg: "d R' U' R U2 R' U R"},{alg: "U' R U R' U2 R U' R'"}]
+          ]
+        }]
+      }
+    })
+  </script>
 
 </body>
 </html>
