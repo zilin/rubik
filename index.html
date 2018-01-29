@@ -50,6 +50,38 @@
             [{alg: "d R' U2 R U2 R' U R"},{alg: "U' R U2 R' U2 R U' R'"}],
             [{alg: "d R' U' R U2 R' U R"},{alg: "U' R U R' U2 R U' R'"}]
           ]
+        }, {
+          header: "Case 3: Corner and Edge in Top Layer (Type 2)",
+          cases: [
+            [{alg: "R U' R' U d R' U' R"}, {alg: "y' R' U R U' d' R U R'"}],
+            [{alg: "R U2 R' U' R U R'"},{alg: "y' R' U2 R U R' U' R"}],
+            [{alg: "U R U2 R' U R U' R'"},{alg: "y' U' R' U2 R U' R' U R"}],
+            [{alg: "U2 R U R' U R U' R'"},{alg: "y' U2 R' U' R U' R' U R"}],
+            [{alg: "U2 R2 U2 R' U' R U' R2"},{alg: "y' U2 R2' U2 R U R' U R2"}]
+          ]
+        }, {
+          header: "Case 4: Corner on Bottom, Edge on Top",
+          cases: [
+            [{alg: "U R U' R' d' L' U L"}, {alg: "d' L' U L d R U' R'"}],
+            [{alg: "y' R' U R U' R' U R"},{alg: "R U' R' U R U' R'"}],
+            [{alg: "R U R' U' R U R'"},{alg: "y' R' U' R U R' U' R"}]
+          ]
+        }, {
+          header: "Case 5: Corner on Top, Edge in Middle",
+          cases: [
+            [{alg: "d R' U R U2 R' U R"}, {alg: "U' R U' R' U2 R U' R'"}],
+            [{alg: "d R' U' R d' R U R'"},{alg: "U' R U R' d R' U' R"}],
+            [{alg: "R U2 R' U' d' L' U L"},{alg: "R U R' U' R U R' U' R U R'"}]
+          ]
+        }, {
+          header: "Case 6: Corner on Bottom, Edge in Middle",
+          cases: [
+            [{alg: ""}, {alg: "R U' R' U F' U2 F"}],
+            [{alg: "R U2 R U R' U R U2 R2"},{alg: "R2' U2 R' U' R U' R' U2 R'"}],
+            [{alg: "R U' R' F' L' U2 L F"},{alg: "R U' R U y' L U' L' B2"}]
+          ]
+
+
         }]
       }
     })
