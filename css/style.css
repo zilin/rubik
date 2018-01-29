@@ -44,7 +44,7 @@
     line-height: 22px;
     height: 27px !important;
     margin-right: 6px;
-    background: url(img/sprite.png) no-repeat -20px 0px #d5d7d8;
+    background: url(sprite.png) no-repeat -20px 0px #d5d7d8;
     text-indent: -117px;
     font-size: 10px !important;
     overflow: hidden;
@@ -77,7 +77,7 @@
 	display: inline-block;
 }
 .roofpig-button-enabled {
-    background: url(img/sprite.png) no-repeat -20px 0px #4287d2;
+    background: url(sprite.png) no-repeat -20px 0px #4287d2;
 }
 .roofpig-button-enabled:hover {
     background-color: #2e649e;
