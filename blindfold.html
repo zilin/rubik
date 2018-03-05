@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+  <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+  <link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="js/roofpig_and_three.min.js"></script>
+  <script src="//cdn.jsdelivr.net/vue/1.0.21/vue.js"></script>
+  <title>Rubik</title>
+</head>
+<body>
+
+<div id="app">
+  <div class="width200 roofpig"
+     data-config="colored=*">
+  </div>
+
+  {{ state }}
+  <table border="1">
+    <thead><tr><th>U-F-R</th><th>U-B-L</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="width200 roofpig"
+            data-config="solved=*|tweaks={{ cube.join(' ') }}">
+          </div>
+        </td>
+        <td>
+          <div class="width200 roofpig"
+            data-config="pov=Ubl|solved=*|tweaks={{ cube.join(' ') }}">
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+  <script>
+    function jsUcfirst(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    function makeCubeExpr(pairs) {
+      return pairs.map(pair =>
+          [jsUcfirst(pair.color), jsUcfirst(pair.pos)].join(":")).join(" ");
+    }
+
+    function permutation(str, i) {
+      return [str.slice(i, str.length), str.slice(0, i)].join("");
+    }
+
+    function make_piece(pos, color, order) {
+      order = (order == undefined) ? 0 : order;
+      color = permutation((color == undefined) ? pos : color, order);
+      var pairs = pos.split("").map((_, i) =>
+          ({pos: permutation(pos, i), color: color[i]}));
+      return makeCubeExpr(pairs);
+    }
+
+    function decode(str) {
+      if (str == '0') {
+        return 9;
+      } else if (str == 'A') {
+        return 10;
+      } else if (str == 'B') {
+        return 11;
+      } else {
+        return str.charCodeAt(0) - '1'.charCodeAt(0);
+      }
+    }
+
+    function encode(index) {
+      if (index == 9) {
+        return '0';
+      } else if (index == 10) {
+        return 'A';
+      } else if (index == 11) {
+        return 'B';
+      } else {
+        return String.fromCharCode(index + '1'.charCodeAt(0));
+      }
+    }
+
+    function cubePiece(piece_array, i, j, order) {
+      j = (j == undefined) ? i : j;
+      var pos = piece_array[decode(i)];
+      var color = piece_array[decode(j)];
+      order = (order == undefined) ? 0 : order;
+      color = permutation(color, order);
+      var pairs = pos.split("").map((_, i) =>
+          ({pos: permutation(pos, i), color: color[i]}));
+      return makeCubeExpr(pairs);
+    }
+
+    function pos2Mapping(pos) {
+      var mapping = {};
+      var circles = pos.split("-");
+      var startIndex = 0;
+      for (var c=0; c<circles.length; c++) {
+        var circle = circles[c];
+        for (var i=0; i<circle.length-1; i++) {
+          mapping[pos[startIndex+i]] = pos[startIndex+i+1];
+        }
+        mapping[pos[startIndex+circle.length-1]] = pos[startIndex];
+        startIndex += circle.length + 1;
+      }
+      return mapping;
+    }
+
+    function state2Piece(state, pieces) {
+      var result = [];
+      var mapping = pos2Mapping(state.pos);
+      for (var c=0; c<pieces.length; c++) {
+        var pos = encode(c);
+        var mapped_pos = (pos in mapping) ? mapping[pos] : pos;
+        var order = state.color[c];
+        result.push(cubePiece(pieces, pos, mapped_pos, order)); 
+      }
+      return result;
+    }
+
+    const CENTERS = [
+      "u", "d", "f", "b", "l", "r", // 6 center pieces
+    ];
+    const CORNERS = [
+      "ufl", "ulb", "ubr", "urf", // top corner pieces
+      "dlf", "dbl", "drb", "dfr", // bottom corner pieces
+    ];
+    const EDGES = [
+      "uf", "ul", "ub", "ur", // top edge pieces
+      "df", "dl", "db", "dr", // bottom edge pieces
+      "fr", "fl", "bl", "br", // middle edge pieces
+    ];
+
+    function centers() {
+      return makeCubeExpr(CENTERS.map(c => ({pos: c, color: c})));
+    }
+
+    function state2Cube(state) {
+      return [centers()].concat(
+          state2Piece(state.corner, CORNERS),
+          state2Piece(state.edge, EDGES));
+    }
+
+    function formatState(state) {
+      return JSON.stringify(state, null, ' ');
+    }
+
+    var state = {
+      corner: {
+        pos: "1375468",
+        color: "12001002",
+      },
+      edge: {
+        pos: "10753249B-6A8",
+        color: "100000000100",
+      }
+    };
+
+    var cube = new Vue({
+      el: '#app',
+      data: {
+        state: formatState(state),
+        cube: state2Cube(state),
+      }
+    })
+  </script>
+</body>
+</html>
