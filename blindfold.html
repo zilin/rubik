@@ -7,7 +7,8 @@
   <link rel="stylesheet" href="css/style.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="js/roofpig_and_three.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/vue"></script>
+  <!--script src="//cdn.jsdelivr.net/npm/vue"></script-->
+  <script src="//cdn.jsdelivr.net/vue/1.0.21/vue.js"></script>
   <style>
     body {
       margin-left: 5px;
@@ -68,7 +69,47 @@
     </tbody>
   </table>
 
-  <pre>{{ cubeString }}</pre>
+  <h3>Step 1: {{ corner_color }}</h3>
+  <table class="pure-table">
+    <thead><tr><th>Formula 1</th><th>Formula 2</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><div class="width150 roofpig" data-config="alg=R U R' U R U2 R' L' U' L U' L' U2 L|flags=showalg"></div></td>
+        <td><div class="width150 roofpig" data-config="alg=L' U2 L U L' U L R U2 R' U' R U' R'|flags=showalg"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Step 2: {{ edge_color }}</h3>
+  <table class="pure-table">
+    <thead><tr><th>Formula 3</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><div class="width150 roofpig" data-config="alg=M' U M' U M' U2 M U M U M U2|flags=showalg"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Step 3: {{ corner_pos }}</h3>
+  <table class="pure-table">
+    <thead><tr><th>Formula 4</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><div class="width150 roofpig" data-config="alg=R U' L' U R' U2 L U' L' U2 L|flags=showalg"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Step 4: {{ edge_pos }}</h3>
+  <table class="pure-table">
+    <thead><tr><th>Formula 4</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><div class="width150 roofpig" data-config="alg=R U' L' U R' U2 L U' L' U2 L|flags=showalg"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
 </div>
 
   <script>
