@@ -9,56 +9,60 @@
   <link rel="stylesheet" href="css/style.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="js/roofpig_and_three.min.js"></script>
+  <!--script src="//cdn.jsdelivr.net/vue/1.0.21/vue.js"></script-->
   <script src="//cdn.jsdelivr.net/npm/vue"></script>
-  <style>
-    .center {
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    td div {
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    th {
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  </style>
   <title>Rubik</title>
 </head>
 <body>
 
 <div id="app">
-  <fieldset>
-    <label for="">Corner Position</label>
-    <input type="text" v-model="corner_pos">
-    <label for="">Corner Face</label>
-    <input type="text" v-model="corner_color">
-    <label for="">Edge Position</label>
-    <input type="text" v-model="edge_pos">
-    <label for="">Edge Face</label>
-    <input type="text" v-model="edge_color">
-    {{ cubeString }}
-    <div class="center"><button class="button-primary" v-on:click="renderCube">Render!</button></div>
-  </fieldset>
+    <fieldset>
+      <label for="">Corner Position</label>
+      <input type="text" v-model="corner_pos">
+      <label for="">Corner Face</label>
+      <input type="text" v-model="corner_color">
+      <label for="">Edge Position</label>
+      <input type="text" v-model="cube.edge.pos">
+      <label for="">Edge Face</label>
+      <input type="text" v-model="cube.edge.color">
+      <label for="">Expr</label>
+      <input type="text" v-model="expr">
+    </fieldset>
+  <button class="button-primary" v-on:click="renderCube">Render!</button>
   <div id="test">
   </div>
-  <table>
+  <p>
+  {{ corner_pos }}
+  {{ corner_color }}
+  {{ cube.edge.pos }}
+  {{ cube.edge.color }}
+  </p>
+  {{ cubeString }}
+  {{ frontView }}
+  {{ backView }}
+  {{ expr }}
+  <table border="1">
     <thead><tr><th>U-F-R</th><th>U-B-L</th></tr></thead>
     <tbody>
       <tr>
-        <td><div id="front" class="cube"></div></td>
-        <td><div id="back" class="cube"></div></td>
+        <td>
+          <div class="width200 roofpig" v-bind:data-config="expr">
+          </div>
+        </td>
+        <td>
+          <div id="front" class="width200 roofpig" v-bind:data-config="frontView">
+          </div>
+        </td>
+        <td>
+          <div id="back" class="width200 roofpig" v-bind:data-config="backView">
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>
 </div>
 
   <script>
-  $(document).ready(function() {
     function jsUcfirst(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
@@ -138,8 +142,7 @@
       for (var c=0; c<pieces.length; c++) {
         var pos = encode(c);
         var mapped_pos = (pos in mapping) ? mapping[pos] : pos;
-        var order = (c < state.color.length) ? state.color[c] : 0;
-        console.log(pos, '->', mapped_pos, ':', order);
+        var order = state.color[c];
         result.push(cubePiece(pieces, pos, mapped_pos, order));
       }
       return result;
@@ -172,31 +175,34 @@
       return JSON.stringify(cube, null, ' ');
     }
 
-    function createCube(expr, cube, parent_div, is_back) {
-      if (cube != null) {
-        cube.remove();
-      }
-      expr = "solved=*|tweaks=" + expr;
-      if (is_back) {
-        expr = "pov=Ubl|" + expr;
-      }
-      return CubeAnimation.create_in_dom(parent_div, expr, "class='width150 myroofpig'");
-    }
-
     var cube = new Vue({
       el: '#app',
       data: function() {
         return {
+          cube: {
+            corner: { pos: "1375468", color: "12001002" },
+            edge: { pos: "10753249B-6A8", color: "100000000100" },
+          },
           corner_pos: "1375468",
           corner_color: "12001002",
           edge_pos: "10753249B-6A8",
           edge_color: "100000000100",
-          front_cube: null,
-          back_cube: null,
+          expr: "solved=*|tweaks=",
+        }
+      },
+      methods: {
+        renderCube: function() {
+          var expr = "solved=*|tweaks=" + cube2Expr({
+            corner: { pos: this.corner_pos, color: this.corner_color },
+            edge: { pos: this.edge_pos, color: this.edge_color },
+          });
+          CubeAnimation.create_in_dom("#test", expr, "class='width200 myroofpig'");
+          console.log("done!");
         }
       },
       computed: {
         cube: function() {
+          this.$forceUpdate();
           return {
             corner: { pos: this.corner_pos, color: this.corner_color },
             edge: { pos: this.edge_pos, color: this.edge_color },
@@ -204,20 +210,33 @@
         },
         cubeString: function() {
           return formatCube(this.cube);
+        },
+        frontView: function() {
+          this.$forceUpdate();
+          return "solved=*|tweaks=" + cube2Expr({
+            corner: { pos: this.corner_pos, color: this.corner_color },
+            edge: { pos: this.edge_pos, color: this.edge_color },
+          });
+        },
+        backView: function() {
+          this.$forceUpdate();
+          return "pov=Ubl|solved=*|tweaks=" + cube2Expr(this.cube);
         }
       },
-      mounted: function() {
-        this.renderCube();
-      },
-      methods: {
-        renderCube: function() {
-          var expr = cube2Expr(this.cube);
-          this.front_cube = createCube(expr, this.front_cube, "#front");
-          this.back_cube = createCube(expr, this.back_cube, "#back", true);
+      watch: {
+        frontView: function(val) {
+          console.log("frontView changed: ", val);
+          var div = $("#front");
+          console.log("div:", div);
+          var div_cube_id = div.attr("data-cube-id");
+          console.log("div_cube_id:", div_cube_id);
+          //var cube = CubeAnimation.by_id[div_cube_id];
+          //cube.remove();
+          delete CubeAnimation.by_id[div_cube_id];
+          new CubeAnimation($("#front"));
         }
       }
-    });
-  });
+    })
   </script>
 </body>
 </html>
