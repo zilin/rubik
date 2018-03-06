@@ -3,7 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
   <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+  <!--[if lte IE 8]>
+   <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
+  <![endif]-->
+  <!--[if gt IE 8]><!-->
+   <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+  <!--<![endif]-->
+
   <link rel="stylesheet" href="css/style.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="js/roofpig_and_three.min.js"></script>
@@ -11,6 +19,8 @@
   <script src="//cdn.jsdelivr.net/vue/1.0.21/vue.js"></script>
   <style>
     body {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
       margin-left: 5px;
       margin-right: 5px;
     }
@@ -37,25 +47,43 @@
 <div id="app">
   <div class="pure-form pure-form-aligned">
   <fieldset>
+    <!--div class="pure-g">
+      <div class="pure-u-1 pure-u-md-1-4">
+        <label for="">Corner Pos</label>
+        <input type="text" v-model="corner_pos" size="12">
+      </div>
+      <div class="pure-u-1 pure-u-md-1-4">
+        <label for="">Corner Face</label>
+        <input type="text" v-model="corner_color" maxlength="8" size="12">
+      </div>
+      <div class="pure-u-1 pure-u-md-1-4">
+        <label for="">Edge Pos</label>
+        <input type="text" v-model="edge_pos" size="12">
+      </div>
+      <div class="pure-u-1 pure-u-md-1-4">
+        <label for="">Edge Face</label>
+        <input type="text" v-model="edge_color" maxlength="12" size="12">
+      </div>
+    </div-->
     <div class="pure-control-group">
       <label for="">Corner Pos</label>
-      <input type="text" v-model="corner_pos">
+      <input type="text" v-model="corner_pos" size="12">
     </div>
     <div class="pure-control-group">
       <label for="">Corner Face</label>
-      <input type="text" v-model="corner_color">
+      <input type="text" v-model="corner_color" maxlength="8" size="12">
     </div>
     <div class="pure-control-group">
       <label for="">Edge Pos</label>
-      <input type="text" v-model="edge_pos">
+      <input type="text" v-model="edge_pos" size="12">
     </div>
     <div class="pure-control-group">
       <label for="">Edge Face</label>
-      <input type="text" v-model="edge_color">
+      <input type="text" v-model="edge_color" maxlength="12" size="12">
     </div>
-    <div class="pure-controls">
+    <!--div class="pure-controls">
       <button class="pure-button pure-button-primary" v-on:click="renderCube">Render!</button>
-    </div>
+    </div-->
   </fieldset>
   </div>
 
@@ -70,6 +98,8 @@
   </table>
 
   <h3>Step 1: {{ corner_color }}</h3>
+  <p>Using the following "Formula 1" and "Formula 2"
+  to flip corner piece "2" counter-clockwisely and clockwisely.</p>
   <table class="pure-table">
     <thead><tr><th>Formula 1</th><th>Formula 2</th></tr></thead>
     <tbody>
@@ -79,8 +109,22 @@
       </tr>
     </tbody>
   </table>
+  <p>Move corner piece to position "2" using the following rules:
+  <table class="pure-table pure-table-striped">
+    <thead><tr><th>Position</th><th>Move</th></tr></thead>
+    <tbody>
+      <tr><td>3</td><td>R2(3->8), D+(8->7), B2(7->2)</td></tr>
+      <tr><td>4</td><td>R2(4->7), B2(7->2)</td></tr>
+      <tr><td>5</td><td>D2(5->7), B2(7->2)</td></tr>
+      <tr><td>6</td><td>D-(6->7), B2(7->2)</td></tr>
+      <tr><td>7</td><td>B2(7->2)</td></tr>
+      <tr><td>8</td><td>D+(8->7), B2(7->2)</td></tr>
+    </tbody>
+  </table>
+  <span>Hint: move to "7" first; can only do R2.</span>
 
   <h3>Step 2: {{ edge_color }}</h3>
+  <p>Using the following "Formula 3" to flip edge piece "3".</p>
   <table class="pure-table">
     <thead><tr><th>Formula 3</th></tr></thead>
     <tbody>
@@ -89,8 +133,25 @@
       </tr>
     </tbody>
   </table>
+  <p>Move edge piece to position "3" using the following rules:
+  <table class="pure-table pure-table-striped">
+    <thead><tr><th>Position</th><th>Move</th></tr></thead>
+    <tbody>
+      <tr><td>2</td><td>L-(3->A), B-(A->3)</td></tr>
+      <tr><td>4</td><td>R+(4->B), B+(B->3)</td></tr>
+      <tr><td>5</td><td>D2(5->7), B2(7->3)</td></tr>
+      <tr><td>6</td><td>D-(6->7), B2(7->3)</td></tr>
+      <tr><td>7</td><td>D+(8->7), B2(7->3)</td></tr>
+      <tr><td>8</td><td>B2(7->3)</td></tr>
+      <tr><td>9</td><td>R2(9->B), B+(B->3)</td></tr>
+      <tr><td>0</td><td>L2(0->A), B-(A->3)</td></tr>
+      <tr><td>A</td><td>B-(A->3)</td></tr>
+      <tr><td>B</td><td>B+(B->3)</td></tr>
+    </tbody>
+  </table>
 
   <h3>Step 3: {{ corner_pos }}</h3>
+  <p>Using the following "Formula 4" to swap corner piece "1" and "2".</p>
   <table class="pure-table">
     <thead><tr><th>Formula 4</th></tr></thead>
     <tbody>
@@ -99,14 +160,24 @@
       </tr>
     </tbody>
   </table>
+  <p>Using the same rule in step 1 to move corner piece to position "2".
 
   <h3>Step 4: {{ edge_pos }}</h3>
-  <table class="pure-table">
-    <thead><tr><th>Formula 4</th></tr></thead>
+  <p>Using "Formula 4" to swap edge piece "1" and "2".</p>
+  <p>Move edge piece to position "2" using the following rules:
+  <table class="pure-table pure-table-striped">
+    <thead><tr><th>Position</th><th>Move</th></tr></thead>
     <tbody>
-      <tr>
-        <td><div class="width150 roofpig" data-config="alg=R U' L' U R' U2 L U' L' U2 L|flags=showalg"></div></td>
-      </tr>
+      <tr><td>3</td><td>MR(3->7), D+(7->6), MR-, MF(6-2)</td></tr>
+      <tr><td>4</td><td>R2(4->B), MF2(8->2)</td></tr>
+      <tr><td>5</td><td>D+(5->8), MF2(8->2)</td></tr>
+      <tr><td>6</td><td>D2(6->8), MF2(8->2)</td></tr>
+      <tr><td>7</td><td>D-(7->8), MF2(8->2)</td></tr>
+      <tr><td>8</td><td>MF2(8->2)</td></tr>
+      <tr><td>9</td><td>R-(9->B), MF2(8->2)</td></tr>
+      <tr><td>0</td><td>MU2(0->B), R+(B->8), MF2(8->2)</td></tr>
+      <tr><td>A</td><td>MU2(A->9), R-(9->8), MF2(8->2)</td></tr>
+      <tr><td>B</td><td>R+(B->8), MF2(8->2)</td></tr>
     </tbody>
   </table>
 
@@ -242,10 +313,10 @@
       el: '#app',
       data: function() {
         return {
-          corner_pos: "1375468",
-          corner_color: "12001002",
-          edge_pos: "10753249B-6A8",
-          edge_color: "100000000100",
+          corner_pos: "",
+          corner_color: "",
+          edge_pos: "",
+          edge_color: "",
           front_cube: null,
           back_cube: null,
         }
@@ -259,6 +330,11 @@
         },
         cubeString: function() {
           return formatCube(this.cube);
+        }
+      },
+      watch: {
+        cube: function(val) {
+          this.renderCube();
         }
       },
       ready: function() {
