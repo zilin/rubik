@@ -35,7 +35,7 @@
 <body>
 
 <div id="app">
-  <form class="pure-form pure-form-aligned">
+  <div class="pure-form pure-form-aligned">
   <fieldset>
     <div class="pure-control-group">
       <label for="">Corner Pos</label>
@@ -57,7 +57,7 @@
       <button class="pure-button pure-button-primary" v-on:click="renderCube">Render!</button>
     </div>
   </fieldset>
-  </form>
+  </div>
 
   <table class="pure-table">
     <thead><tr><th>U-F-R</th><th>U-B-L</th></tr></thead>
@@ -261,7 +261,7 @@
           return formatCube(this.cube);
         }
       },
-      mounted: function() {
+      ready: function() {
         this.renderCube();
       },
       methods: {
