@@ -67,19 +67,19 @@
     </div-->
     <div class="pure-control-group">
       <label for="">Corner Pos</label>
-      <input type="text" v-model="corner_pos" size="12">
+      <input type="text" v-model="corner_pos" size="15">
     </div>
     <div class="pure-control-group">
       <label for="">Corner Face</label>
-      <input type="text" v-model="corner_color" maxlength="8" size="12">
+      <input type="text" v-model="corner_color" maxlength="8" size="15">
     </div>
     <div class="pure-control-group">
       <label for="">Edge Pos</label>
-      <input type="text" v-model="edge_pos" size="12">
+      <input type="text" v-model="edge_pos" size="15">
     </div>
     <div class="pure-control-group">
       <label for="">Edge Face</label>
-      <input type="text" v-model="edge_color" maxlength="12" size="12">
+      <input type="text" v-model="edge_color" maxlength="12" size="15">
     </div>
     <!--div class="pure-controls">
       <button class="pure-button pure-button-primary" v-on:click="renderCube">Render!</button>
@@ -104,8 +104,8 @@
     <thead><tr><th>Formula 1</th><th>Formula 2</th></tr></thead>
     <tbody>
       <tr>
-        <td><div class="width150 roofpig" data-config="alg=R U R' U R U2 R' L' U' L U' L' U2 L|flags=showalg"></div></td>
-        <td><div class="width150 roofpig" data-config="alg=L' U2 L U L' U L R U2 R' U' R U' R'|flags=showalg"></div></td>
+        <td><div class="width150 roofpig" data-config="alg=R U R' U R U2 R' L' U' L U' L' U2 L|flags=showalg|tweaks=X:Lub"></div></td>
+        <td><div class="width150 roofpig" data-config="alg=L' U2 L U L' U L R U2 R' U' R U' R'|flags=showalg|tweaks=X:Bul"></div></td>
       </tr>
     </tbody>
   </table>
@@ -114,14 +114,9 @@
     <thead><tr><th>Position</th><th>Move</th></tr></thead>
     <tbody>
       <tr><td>3</td><td>R2(3->8), D+(8->7), B2(7->2)</td></tr>
-      <tr><td>4</td><td>R2(4->7), B2(7->2)</td></tr>
-      <tr><td>5</td><td>D2(5->7), B2(7->2)</td></tr>
-      <tr><td>6</td><td>D-(6->7), B2(7->2)</td></tr>
-      <tr><td>7</td><td>B2(7->2)</td></tr>
-      <tr><td>8</td><td>D+(8->7), B2(7->2)</td></tr>
+      <tr><td>4,5,6,7,8</td><td>*->7, B2(7->2)</td></tr>
     </tbody>
   </table>
-  <span>Hint: move to "7" first; can only do R2.</span>
 
   <h3>Step 2: {{ edge_color }}</h3>
   <p>Using the following "Formula 3" to flip edge piece "3".</p>
@@ -129,7 +124,7 @@
     <thead><tr><th>Formula 3</th></tr></thead>
     <tbody>
       <tr>
-        <td><div class="width150 roofpig" data-config="alg=M' U M' U M' U2 M U M U M U2|flags=showalg"></div></td>
+        <td><div class="width150 roofpig" data-config="alg=M' U M' U M' U2 M U M U M U2|flags=showalg|tweaks=X:Bu"></div></td>
       </tr>
     </tbody>
   </table>
@@ -137,16 +132,9 @@
   <table class="pure-table pure-table-striped">
     <thead><tr><th>Position</th><th>Move</th></tr></thead>
     <tbody>
-      <tr><td>2</td><td>L-(3->A), B-(A->3)</td></tr>
-      <tr><td>4</td><td>R+(4->B), B+(B->3)</td></tr>
-      <tr><td>5</td><td>D2(5->7), B2(7->3)</td></tr>
-      <tr><td>6</td><td>D-(6->7), B2(7->3)</td></tr>
-      <tr><td>7</td><td>D+(8->7), B2(7->3)</td></tr>
-      <tr><td>8</td><td>B2(7->3)</td></tr>
-      <tr><td>9</td><td>R2(9->B), B+(B->3)</td></tr>
-      <tr><td>0</td><td>L2(0->A), B-(A->3)</td></tr>
-      <tr><td>A</td><td>B-(A->3)</td></tr>
-      <tr><td>B</td><td>B+(B->3)</td></tr>
+      <tr><td>2,0,A</td><td>*->A, B-(A->3)</td></tr>
+      <tr><td>4,5,6,7,8</td><td>*->7, B2(7->3)</td></tr>
+      <tr><td>9,B</td><td>*->B, B+(B->3)</td></tr>
     </tbody>
   </table>
 
@@ -169,15 +157,10 @@
     <thead><tr><th>Position</th><th>Move</th></tr></thead>
     <tbody>
       <tr><td>3</td><td>MR(3->7), D+(7->6), MR-, MF(6-2)</td></tr>
-      <tr><td>4</td><td>R2(4->B), MF2(8->2)</td></tr>
-      <tr><td>5</td><td>D+(5->8), MF2(8->2)</td></tr>
-      <tr><td>6</td><td>D2(6->8), MF2(8->2)</td></tr>
-      <tr><td>7</td><td>D-(7->8), MF2(8->2)</td></tr>
-      <tr><td>8</td><td>MF2(8->2)</td></tr>
-      <tr><td>9</td><td>R-(9->B), MF2(8->2)</td></tr>
-      <tr><td>0</td><td>MU2(0->B), R+(B->8), MF2(8->2)</td></tr>
-      <tr><td>A</td><td>MU2(A->9), R-(9->8), MF2(8->2)</td></tr>
-      <tr><td>B</td><td>R+(B->8), MF2(8->2)</td></tr>
+      <tr><td>4</td><td>R2(4->8), MF2(8->2)</td></tr>
+      <tr><td>5,6,7,8</td><td>*->8, MF2(8->2)</td></tr>
+      <tr><td>0,B</td><td>[MU2(0->B)], R+(B->8), MF2(8->2)</td></tr>
+      <tr><td>9,A</td><td>[MU2(A->9)], R-(9->8), MF2(8->2)</td></tr>
     </tbody>
   </table>
 
