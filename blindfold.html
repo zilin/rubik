@@ -4,14 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
-  <!--[if lte IE 8]>
-   <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
-  <![endif]-->
-  <!--[if gt IE 8]><!-->
-   <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
-  <!--<![endif]-->
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
   <link rel="stylesheet" href="css/style.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="js/roofpig_and_three.min.js"></script>
@@ -21,23 +14,9 @@
     body {
       font-family: 'Roboto', sans-serif;
       font-size: 16px;
+      margin-top: 5px;
       margin-left: 5px;
       margin-right: 5px;
-    }
-    .center {
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    td div {
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    th {
-      text-align: center;
-      margin-left: auto;
-      margin-right: auto;
     }
   </style>
   <title>Rubik</title>
@@ -45,125 +24,114 @@
 <body>
 
 <div id="app">
-  <div class="pure-form pure-form-aligned">
-  <fieldset>
-    <!--div class="pure-g">
-      <div class="pure-u-1 pure-u-md-1-4">
-        <label for="">Corner Pos</label>
-        <input type="text" v-model="corner_pos" size="12">
-      </div>
-      <div class="pure-u-1 pure-u-md-1-4">
-        <label for="">Corner Face</label>
-        <input type="text" v-model="corner_color" maxlength="8" size="12">
-      </div>
-      <div class="pure-u-1 pure-u-md-1-4">
-        <label for="">Edge Pos</label>
-        <input type="text" v-model="edge_pos" size="12">
-      </div>
-      <div class="pure-u-1 pure-u-md-1-4">
-        <label for="">Edge Face</label>
-        <input type="text" v-model="edge_color" maxlength="12" size="12">
-      </div>
-    </div-->
-    <div class="pure-control-group">
-      <label for="">Corner Pos</label>
-      <input type="text" v-model="corner_pos" size="15">
+    <section class="hero is-dark">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">
+              Blindfold Rubik's Cube
+            </h1>
+            <h2 class="subtitle">
+              complete guide
+            </h2>
+          </div>
+        </div>
+      </section>
+  <div class="content">
+    <h3>Input: </h3>
+    <div class="control">
+      <input placeholder="Corner Permutation" v-model="corner_pos" />
+      <input placeholder="Corner Orientation" v-model="corner_color" maxlength="8" />
+      <input placeholder="Corner Permutation" v-model="edge_pos" />
+      <input placeholder="Edge Orientation" v-model="edge_color" maxlength="12" />
     </div>
-    <div class="pure-control-group">
-      <label for="">Corner Face</label>
-      <input type="text" v-model="corner_color" maxlength="8" size="15">
-    </div>
-    <div class="pure-control-group">
-      <label for="">Edge Pos</label>
-      <input type="text" v-model="edge_pos" size="15">
-    </div>
-    <div class="pure-control-group">
-      <label for="">Edge Face</label>
-      <input type="text" v-model="edge_color" maxlength="12" size="15">
-    </div>
-    <!--div class="pure-controls">
-      <button class="pure-button pure-button-primary" v-on:click="renderCube">Render!</button>
-    </div-->
-  </fieldset>
-  </div>
+    <h3>Result: </h3>
+    <table class="table is-bordered">
+      <thead>
+        <tr>
+          <th class="has-text-centered">U-F-R</th>
+          <th class="has-text-centered">U-B-L</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div id="front" class="cube child-center"></div></td>
+          <td><div id="back" class="cube"></div></td>
+        </tr>
+      </tbody>
+    </table>
 
-  <table class="pure-table">
-    <thead><tr><th>U-F-R</th><th>U-B-L</th></tr></thead>
-    <tbody>
+    <h3>Step 1: {{ corner_color }}</h3>
+    <p>Using the following "Formula 1" and "Formula 2"
+    to flip corner piece "2" counter-clockwisely and clockwisely.</p>
+    <table class="table is-bordered">
+    <thead>
       <tr>
-        <td><div id="front" class="cube"></div></td>
-        <td><div id="back" class="cube"></div></td>
+        <th class="has-text-centered">Formula 1</th>
+        <th class="has-text-centered">Formula 2</th>
       </tr>
-    </tbody>
-  </table>
-
-  <h3>Step 1: {{ corner_color }}</h3>
-  <p>Using the following "Formula 1" and "Formula 2"
-  to flip corner piece "2" counter-clockwisely and clockwisely.</p>
-  <table class="pure-table">
-    <thead><tr><th>Formula 1</th><th>Formula 2</th></tr></thead>
+    </thead>
     <tbody>
       <tr>
         <td><div class="width150 roofpig" data-config="alg=R U R' U R U2 R' L' U' L U' L' U2 L|flags=showalg|tweaks=X:Lub"></div></td>
         <td><div class="width150 roofpig" data-config="alg=L' U2 L U L' U L R U2 R' U' R U' R'|flags=showalg|tweaks=X:Bul"></div></td>
       </tr>
     </tbody>
-  </table>
-  <p>Move corner piece to position "2" using the following rules:
-  <table class="pure-table pure-table-striped">
-    <thead><tr><th>Position</th><th>Move</th></tr></thead>
-    <tbody>
-      <tr><td>3</td><td>R2(3->8), D+(8->7), B2(7->2)</td></tr>
-      <tr><td>4,5,6,7,8</td><td>*->7, B2(7->2)</td></tr>
-    </tbody>
-  </table>
+    </table>
+    <p>Move corner piece to position "2" using the following rules:
+    <table class="table is-bordered is-striped">
+      <thead><tr><th>Position</th><th>Move</th></tr></thead>
+      <tbody>
+        <tr><td>3</td><td>R2(3->8), D+(8->7), B2(7->2)</td></tr>
+        <tr><td>4,5,6,7,8</td><td>*->7, B2(7->2)</td></tr>
+      </tbody>
+    </table>
+  
+    <h3>Step 2: {{ edge_color }}</h3>
+    <p>Using the following "Formula 3" to flip edge piece "3".</p>
+    <table class="table is-bordered">
+      <thead><tr><th class="has-text-centered">Formula 3</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><div class="width150 roofpig" data-config="alg=M' U M' U M' U2 M U M U M U2|flags=showalg|tweaks=X:Bu"></div></td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Move edge piece to position "3" using the following rules:
+    <table class="table is-bordered is-striped">
+      <thead><tr><th>Position</th><th>Move</th></tr></thead>
+      <tbody>
+        <tr><td>2,0,A</td><td>*->A, B-(A->3)</td></tr>
+        <tr><td>4,5,6,7,8</td><td>*->7, B2(7->3)</td></tr>
+        <tr><td>9,B</td><td>*->B, B+(B->3)</td></tr>
+      </tbody>
+    </table>
 
-  <h3>Step 2: {{ edge_color }}</h3>
-  <p>Using the following "Formula 3" to flip edge piece "3".</p>
-  <table class="pure-table">
-    <thead><tr><th>Formula 3</th></tr></thead>
-    <tbody>
-      <tr>
-        <td><div class="width150 roofpig" data-config="alg=M' U M' U M' U2 M U M U M U2|flags=showalg|tweaks=X:Bu"></div></td>
-      </tr>
-    </tbody>
-  </table>
-  <p>Move edge piece to position "3" using the following rules:
-  <table class="pure-table pure-table-striped">
-    <thead><tr><th>Position</th><th>Move</th></tr></thead>
-    <tbody>
-      <tr><td>2,0,A</td><td>*->A, B-(A->3)</td></tr>
-      <tr><td>4,5,6,7,8</td><td>*->7, B2(7->3)</td></tr>
-      <tr><td>9,B</td><td>*->B, B+(B->3)</td></tr>
-    </tbody>
-  </table>
+    <h3>Step 3: {{ corner_pos }}</h3>
+    <p>Using the following "Formula 4" to swap corner piece "1" and "2".</p>
+    <table class="table is-bordered">
+      <thead><tr><th class="has-text-centered">Formula 4</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><div class="width150 roofpig" data-config="alg=R U' L' U R' U2 L U' L' U2 L|flags=showalg"></div></td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Using the same rule in step 1 to move corner piece to position "2".
 
-  <h3>Step 3: {{ corner_pos }}</h3>
-  <p>Using the following "Formula 4" to swap corner piece "1" and "2".</p>
-  <table class="pure-table">
-    <thead><tr><th>Formula 4</th></tr></thead>
-    <tbody>
-      <tr>
-        <td><div class="width150 roofpig" data-config="alg=R U' L' U R' U2 L U' L' U2 L|flags=showalg"></div></td>
-      </tr>
-    </tbody>
-  </table>
-  <p>Using the same rule in step 1 to move corner piece to position "2".
-
-  <h3>Step 4: {{ edge_pos }}</h3>
-  <p>Using "Formula 4" to swap edge piece "1" and "2".</p>
-  <p>Move edge piece to position "2" using the following rules:
-  <table class="pure-table pure-table-striped">
-    <thead><tr><th>Position</th><th>Move</th></tr></thead>
-    <tbody>
-      <tr><td>3</td><td>MR(3->7), D+(7->6), MR-, MF(6-2)</td></tr>
-      <tr><td>4</td><td>R2(4->8), MF2(8->2)</td></tr>
-      <tr><td>5,6,7,8</td><td>*->8, MF2(8->2)</td></tr>
-      <tr><td>0,B</td><td>[MU2(0->B)], R+(B->8), MF2(8->2)</td></tr>
-      <tr><td>9,A</td><td>[MU2(A->9)], R-(9->8), MF2(8->2)</td></tr>
-    </tbody>
-  </table>
-
+    <h3>Step 4: {{ edge_pos }}</h3>
+    <p>Using "Formula 4" to swap edge piece "1" and "2".</p>
+    <p>Move edge piece to position "2" using the following rules:
+    <table class="table is-bordered is-striped">
+      <thead><tr><th>Position</th><th>Move</th></tr></thead>
+      <tbody>
+        <tr><td>3</td><td>MR(3->7), D+(7->6), MR-, MF(6-2)</td></tr>
+        <tr><td>4</td><td>R2(4->8), MF2(8->2)</td></tr>
+        <tr><td>5,6,7,8</td><td>*->8, MF2(8->2)</td></tr>
+        <tr><td>0,B</td><td>[MU2(0->B)], R+(B->8), MF2(8->2)</td></tr>
+        <tr><td>9,A</td><td>[MU2(A->9)], R-(9->8), MF2(8->2)</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
   <script>
@@ -289,7 +257,7 @@
       if (is_back) {
         expr = "pov=Ubl|" + expr;
       }
-      return CubeAnimation.create_in_dom(parent_div, expr, "class='width150 myroofpig'");
+      return CubeAnimation.create_in_dom(parent_div, expr, "class='width150 roofpig'");
     }
 
     var cube = new Vue({
